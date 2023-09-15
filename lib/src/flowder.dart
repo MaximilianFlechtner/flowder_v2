@@ -21,7 +21,9 @@ class Flowder {
   /// Start a new Download progress.
   /// Returns a [DownloaderCore]
   static Future<DownloaderCore> download(
-      String url, DownloaderUtils options) async {
+    String url,
+    DownloaderUtils options,
+  ) async {
     try {
       // ignore: cancel_subscriptions
       final subscription = await initDownload(url, options);
@@ -34,7 +36,9 @@ class Flowder {
   /// Init a new Download, however this returns a [StreamSubscription]
   /// use at your own risk.
   static Future<StreamSubscription> initDownload(
-      String url, DownloaderUtils options) async {
+    String url,
+    DownloaderUtils options,
+  ) async {
     var lastProgress = await options.progress.getProgress(url);
     final client = options.client ??
         Dio(BaseOptions(sendTimeout: const Duration(milliseconds: 60)));
@@ -46,7 +50,7 @@ class Flowder {
 
       final response = await client.download(
         url,
-        file,
+        file.path,
         onReceiveProgress: (count, total) async {
           subscription!.pause();
 
